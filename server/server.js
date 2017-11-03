@@ -1,4 +1,4 @@
-import { Meteor } from 'meteor/meteor';
+ import { Meteor } from 'meteor/meteor';
 
 Meteor.startup(() => {
 	console.log("Meteor.Startup actually called here");
@@ -7,6 +7,49 @@ Meteor.startup(() => {
 
 // Methods that can be called on the server by the client
 Meteor.methods({
+
+	addCourse: function(courseParams) {
+
+		console.log("addCourse was called");
+		console.log(courseParams);
+
+		if (courseParams.coursename.length > 0
+			&& courseParams.departmentname.length > 0
+			&& courseParams.hours > 0) {
+
+			courseParams.createdAt = new Date();
+			CourseInfo.insert(courseParams);
+
+			console.log("Added to DB!");
+			} else {
+
+				console.log("Not added to DB!");
+			}
+	},
+	
+	addSection: function(sectionParams) {
+		
+				console.log("addSection was called");
+				console.log(sectionParams);
+		
+				if (sectionParams.sectionnumber > 0
+					&& sectionParams.course.length > 0
+					&& sectionParams.professor.length > 0) {
+		
+					sectionParams.createdAt = new Date();
+					SectionInfo.insert(sectionParams);
+		
+					console.log("Added to DB!");
+					} else {
+		
+						console.log("Not added to DB!");
+					}
+			},
+		
+
+	
+
+	
 	addProfessor: function(profParams) {
 
 		console.log("addProfessor was called!");
@@ -35,6 +78,16 @@ Meteor.methods({
 	}
 
 });
+
+// Publish all elements in a table:
+Meteor.publish("courses", function() {
+	return CourseInfo.find();
+})
+
+// Publish all elements in a table:
+Meteor.publish("sections", function() {
+	return SectionInfo.find();
+})
 
 
 // Publish all elements in a table:
